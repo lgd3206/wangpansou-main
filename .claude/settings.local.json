@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//f/航海/盘搜/**)",
+      "Bash(git init:*)",
+      "Bash(git remote add:*)",
+      "Bash(git add:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
