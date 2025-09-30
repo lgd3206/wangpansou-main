@@ -4,8 +4,10 @@
     "ENABLED_PLUGINS": "all",
     "ASYNC_PLUGIN_ENABLED": "true",
     "CACHE_ENABLED": "true",
-    "ASYNC_RESPONSE_TIMEOUT": "8",
-    "PLUGIN_TIMEOUT": "30"
+    "ASYNC_RESPONSE_TIMEOUT": "15",
+    "PLUGIN_TIMEOUT": "45",
+    "ASYNC_MAX_BACKGROUND_WORKERS": "50",
+    "ASYNC_MAX_BACKGROUND_TASKS": "500"
   },
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/handler" }
