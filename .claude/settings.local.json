@@ -6,7 +6,10 @@
       "Bash(git remote add:*)",
       "Bash(git add:*)",
       "Bash(git commit -m \"$(cat <<''EOF''\n初始化wangpansou网盘搜索项目\n\n这个项目是一个综合性的网盘搜索引擎，支持多个网盘搜索平台的集成。\n主要功能包括：\n- 多平台网盘资源搜索\n- 缓存系统优化\n- RESTful API接口\n- Web前端界面\n- Docker容器化部署支持\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(mkdir:*)",
+      "Bash(mv:*)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": []

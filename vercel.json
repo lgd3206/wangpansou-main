@@ -1,13 +1,13 @@
 {
   "functions": {
-    "api/index.go": {
+    "api/handler.go": {
       "runtime": "@vercel/go"
     }
   },
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "/api"
+      "dest": "/api/handler"
     },
     {
       "src": "/static/(.*)",

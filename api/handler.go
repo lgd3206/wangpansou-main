@@ -1,29 +1,89 @@
-package api
+package handler
 
 import (
-	// "fmt"
 	"net/http"
-	// "os"
-	
+	"sync"
+	"strings"
+
 	"github.com/gin-gonic/gin"
 	"pansou/config"
 	"pansou/model"
 	"pansou/service"
 	jsonutil "pansou/util/json"
 	"pansou/util"
-	"strings"
 )
 
-// 保存搜索服务的实例
-var searchService *service.SearchService
+var (
+	searchService *service.SearchService
+	once          sync.Once
+	app           *gin.Engine
+)
 
-// SetSearchService 设置搜索服务实例
-func SetSearchService(service *service.SearchService) {
-	searchService = service
+// CORSMiddleware CORS中间件
+func corsMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		origin := c.Request.Header.Get("Origin")
+		c.Header("Access-Control-Allow-Origin", origin)
+		c.Header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+		c.Header("Access-Control-Allow-Headers", "Content-Type, Authorization")
+		c.Header("Access-Control-Allow-Credentials", "true")
+
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(http.StatusNoContent)
+			return
+		}
+
+		c.Next()
+	}
 }
 
-// SearchHandler 搜索处理函数
-func SearchHandler(c *gin.Context) {
+// Handler 是 Vercel 的入口函数
+func Handler(w http.ResponseWriter, r *http.Request) {
+	once.Do(func() {
+		// 初始化配置
+		config.LoadConfig()
+
+		// 创建搜索服务
+		searchService = service.NewSearchService()
+
+		// 创建 Gin 应用
+		gin.SetMode(gin.ReleaseMode)
+		app = gin.New()
+
+		// 添加中间件
+		app.Use(gin.Recovery())
+		app.Use(corsMiddleware())
+
+		// 设置路由
+		app.GET("/api/search", searchHandler)
+		app.POST("/api/search", searchHandler)
+
+		// 静态文件处理
+		app.Static("/static", "./static")
+		app.StaticFile("/", "./static/index.html")
+		app.StaticFile("/favicon.ico", "./static/favicon.ico")
+		app.StaticFile("/robots.txt", "./static/robots.txt")
+		app.StaticFile("/ads.txt", "./static/ads.txt")
+		app.StaticFile("/sitemap.xml", "./static/sitemap.xml")
+
+		// HTML页面
+		app.StaticFile("/about", "./static/about.html")
+		app.StaticFile("/contact", "./static/contact.html")
+		app.StaticFile("/help", "./static/help.html")
+		app.StaticFile("/privacy", "./static/privacy.html")
+		app.StaticFile("/terms", "./static/terms.html")
+		app.StaticFile("/search-tips", "./static/search-tips.html")
+		app.StaticFile("/categories", "./static/categories.html")
+		app.NoRoute(func(c *gin.Context) {
+			c.File("./static/404.html")
+		})
+	})
+
+	app.ServeHTTP(w, r)
+}
+
+// searchHandler 搜索处理函数（内部使用）
+func searchHandler(c *gin.Context) {
 	var req model.SearchRequest
 	var err error
 
