@@ -705,7 +705,7 @@
 
         // 执行单个阶段的搜索
         async function searchPhase(keyword, phase, timeout) {
-            const url = `${CONFIG.API_BASE}/search?kw=${encodeURIComponent(keyword)}&res=results&src=all&phase=${phase}&page=${currentPage}`;
+            const url = `${CONFIG.API_BASE}/search?kw=${encodeURIComponent(keyword)}&src=all`;
             
             const response = await fetchWithTimeout(url, {
                 signal: searchAbortController.signal
