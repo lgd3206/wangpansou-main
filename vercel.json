@@ -1,5 +1,12 @@
 {
   "version": 2,
+  "env": {
+    "ENABLED_PLUGINS": "all",
+    "ASYNC_PLUGIN_ENABLED": "true",
+    "CACHE_ENABLED": "true",
+    "ASYNC_RESPONSE_TIMEOUT": "8",
+    "PLUGIN_TIMEOUT": "30"
+  },
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/handler" }
   ]
