@@ -1,16 +1,27 @@
 {
-  "rewrites": [
+  "version": 2,
+  "builds": [
     {
-      "source": "/api/:path*",
-      "destination": "/api/handler"
+      "src": "api/handler.go",
+      "use": "@vercel/go"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/search",
+      "dest": "/api/handler"
     },
     {
-      "source": "/",
-      "destination": "/api/handler"
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
     },
     {
-      "source": "/:path*",
-      "destination": "/api/handler"
+      "src": "/(.*\\.(css|js|png|jpg|jpeg|gif|svg|ico|txt|xml))",
+      "dest": "/static/$1"
+    },
+    {
+      "src": "/",
+      "dest": "/static/index.html"
     }
   ]
 }
