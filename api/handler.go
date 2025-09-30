@@ -62,24 +62,29 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		app.GET("/api/search", searchHandler)
 		app.POST("/api/search", searchHandler)
 
-		// 静态文件处理
-		app.Static("/static", "./static")
-		app.StaticFile("/", "./static/index.html")
-		app.StaticFile("/favicon.ico", "./static/favicon.ico")
-		app.StaticFile("/robots.txt", "./static/robots.txt")
-		app.StaticFile("/ads.txt", "./static/ads.txt")
-		app.StaticFile("/sitemap.xml", "./static/sitemap.xml")
+		// 根路径返回简单的HTML
+		app.GET("/", func(c *gin.Context) {
+			c.Header("Content-Type", "text/html; charset=utf-8")
+			c.String(200, `<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>网盘搜索引擎</title>
+</head>
+<body>
+    <h1>网盘搜索引擎 API</h1>
+    <p>API端点: <code>GET/POST /api/search</code></p>
+    <p>参数示例: <code>/api/search?kw=关键词</code></p>
+</body>
+</html>`)
+		})
 
-		// HTML页面
-		app.StaticFile("/about", "./static/about.html")
-		app.StaticFile("/contact", "./static/contact.html")
-		app.StaticFile("/help", "./static/help.html")
-		app.StaticFile("/privacy", "./static/privacy.html")
-		app.StaticFile("/terms", "./static/terms.html")
-		app.StaticFile("/search-tips", "./static/search-tips.html")
-		app.StaticFile("/categories", "./static/categories.html")
+		// 404处理
 		app.NoRoute(func(c *gin.Context) {
-			c.File("./static/404.html")
+			c.JSON(404, gin.H{
+				"error": "Not Found",
+				"path":  c.Request.URL.Path,
+			})
 		})
 	})
 
