@@ -9,6 +9,7 @@ import (
 	"pansou/config"
 	"pansou/model"
 	"pansou/service"
+	"pansou/plugin"
 	jsonutil "pansou/util/json"
 	"pansou/util"
 )
@@ -41,10 +42,13 @@ func corsMiddleware() gin.HandlerFunc {
 func Handler(w http.ResponseWriter, r *http.Request) {
 	once.Do(func() {
 		// 初始化配置
-		config.LoadConfig()
+		config.Init()
+
+		// 初始化插件管理器
+		pluginManager := plugin.NewPluginManager()
 
 		// 创建搜索服务
-		searchService = service.NewSearchService()
+		searchService = service.NewSearchService(pluginManager)
 
 		// 创建 Gin 应用
 		gin.SetMode(gin.ReleaseMode)
