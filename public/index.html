@@ -1172,11 +1172,11 @@
 
             const data = await response.json();
             console.log(`第${phase + 1}阶段API响应:`, data);
-            
+
             let results = [];
-            
+
             const isSuccess = (data.code === 0 || data.code === 200) && data.message === 'success';
-            
+
             if (isSuccess && data.data) {
                 if (Array.isArray(data.data)) {
                     results = data.data;
@@ -1194,7 +1194,7 @@
             } else if (Array.isArray(data)) {
                 results = data;
             }
-            
+
             console.log(`第${phase + 1}阶段解析出的结果:`, results.length, '个');
             return results;
         }

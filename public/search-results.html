@@ -716,27 +716,40 @@
             }
 
             const data = await response.json();
-            
+            console.log('API响应数据:', data);
+
             let results = [];
-            
+
             const isSuccess = (data.code === 0 || data.code === 200) && data.message === 'success';
-            
+            console.log('响应是否成功:', isSuccess, 'code:', data.code, 'message:', data.message);
+
             if (isSuccess && data.data) {
+                console.log('进入isSuccess分支，data.data类型:', typeof data.data);
                 if (Array.isArray(data.data)) {
                     results = data.data;
+                    console.log('data.data是数组，结果数:', results.length);
                 } else if (data.data.results && Array.isArray(data.data.results)) {
                     results = data.data.results;
+                    console.log('使用data.data.results，结果数:', results.length);
                 } else if (data.data.merged_by_type) {
+                    console.log('检测到merged_by_type，开始转换...');
+                    console.log('merged_by_type内容:', data.data.merged_by_type);
                     results = convertMergedToResults(data.data.merged_by_type);
+                    console.log('转换后结果数:', results.length);
                 }
             } else if (data.results && Array.isArray(data.results)) {
                 results = data.results;
+                console.log('使用data.results，结果数:', results.length);
             } else if (data.merged_by_type) {
+                console.log('使用data.merged_by_type，开始转换...');
                 results = convertMergedToResults(data.merged_by_type);
+                console.log('转换后结果数:', results.length);
             } else if (Array.isArray(data)) {
                 results = data;
+                console.log('data本身是数组，结果数:', results.length);
             }
-            
+
+            console.log('最终返回结果数:', results.length);
             return results;
         }
 
