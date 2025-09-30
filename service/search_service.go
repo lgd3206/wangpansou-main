@@ -1254,11 +1254,13 @@ func (s *SearchService) searchPlugins(keyword string, plugins []string, forceRef
 	}
 	
 	// 缓存未命中或强制刷新，执行实际搜索
-	
+	fmt.Printf("🔍 [%s] 开始插件搜索，缓存未命中\n", keyword)
+
 	// 获取所有可用插件
 	var availablePlugins []plugin.AsyncSearchPlugin
 	if s.pluginManager != nil {
 		allPlugins := s.pluginManager.GetPlugins()
+		fmt.Printf("📦 [%s] 插件管理器中的插件总数: %d\n", keyword, len(allPlugins))
 		
 		// 确保plugins不为nil并且有非空元素
 		hasPlugins := plugins != nil && len(plugins) > 0
@@ -1290,7 +1292,10 @@ func (s *SearchService) searchPlugins(keyword string, plugins []string, forceRef
 		} else {
 			// 如果plugins为nil、空数组或只包含空字符串，视为未指定，使用所有插件
 			availablePlugins = allPlugins
+			fmt.Printf("✅ [%s] 使用所有插件: %d 个\n", keyword, len(availablePlugins))
 		}
+	} else {
+		fmt.Printf("⚠️  [%s] 插件管理器为nil\n", keyword)
 	}
 	
 	// 控制并发数
@@ -1320,9 +1325,11 @@ func (s *SearchService) searchPlugins(keyword string, plugins []string, forceRef
 			return results
 		})
 	}
-	
+
 	// 执行搜索任务并获取结果
+	fmt.Printf("🚀 [%s] 开始执行 %d 个插件搜索任务，并发数: %d\n", keyword, len(tasks), concurrency)
 	results := pool.ExecuteBatchWithTimeout(tasks, concurrency, config.AppConfig.PluginTimeout)
+	fmt.Printf("📥 [%s] 插件搜索完成，收到 %d 个结果\n", keyword, len(results))
 	
 	// 合并所有插件的结果，过滤掉无链接的结果
 	var allResults []model.SearchResult
@@ -1337,6 +1344,7 @@ func (s *SearchService) searchPlugins(keyword string, plugins []string, forceRef
 			}
 		}
 	}
+	fmt.Printf("✨ [%s] 合并后有效结果数: %d\n", keyword, len(allResults))
 	
 	// 恢复主程序缓存更新：确保最终合并结果被正确缓存
 	if cacheInitialized && config.AppConfig.CacheEnabled {
