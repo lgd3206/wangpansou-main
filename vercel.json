@@ -1,80 +1,16 @@
 {
-  "functions": {
-    "api/handler.go": {
-      "runtime": "@vercel/go"
-    }
-  },
-  "routes": [
+  "rewrites": [
     {
-      "src": "/api/(.*)",
-      "dest": "/api/handler"
+      "source": "/api/:path*",
+      "destination": "/api/handler"
     },
     {
-      "src": "/static/(.*)",
-      "dest": "/static/$1"
+      "source": "/",
+      "destination": "/api/handler"
     },
     {
-      "src": "/(.*\\.(css|js|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot))",
-      "dest": "/static/$1"
-    },
-    {
-      "src": "/robots.txt",
-      "dest": "/static/robots.txt"
-    },
-    {
-      "src": "/ads.txt",
-      "dest": "/static/ads.txt"
-    },
-    {
-      "src": "/sitemap.xml",
-      "dest": "/static/sitemap.xml"
-    },
-    {
-      "src": "/about",
-      "dest": "/static/about.html"
-    },
-    {
-      "src": "/contact",
-      "dest": "/static/contact.html"
-    },
-    {
-      "src": "/help",
-      "dest": "/static/help.html"
-    },
-    {
-      "src": "/privacy",
-      "dest": "/static/privacy.html"
-    },
-    {
-      "src": "/terms",
-      "dest": "/static/terms.html"
-    },
-    {
-      "src": "/search-tips",
-      "dest": "/static/search-tips.html"
-    },
-    {
-      "src": "/categories",
-      "dest": "/static/categories.html"
-    },
-    {
-      "src": "/",
-      "dest": "/static/index.html"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/static/404.html",
-      "status": 404
-    }
-  ],
-  "headers": [
-    {
-      "source": "/api/(.*)",
-      "headers": [
-        { "key": "Access-Control-Allow-Origin", "value": "*" },
-        { "key": "Access-Control-Allow-Methods", "value": "GET, POST, OPTIONS" },
-        { "key": "Access-Control-Allow-Headers", "value": "Content-Type" }
-      ]
+      "source": "/:path*",
+      "destination": "/api/handler"
     }
   ]
 }
