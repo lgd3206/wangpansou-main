@@ -104,26 +104,29 @@ func (pm *PluginManager) RegisterAllGlobalPlugins() {
 }
 
 // RegisterGlobalPluginsWithFilter 根据过滤器注册全局异步插件
-// enabledPlugins: nil表示未设置（不启用任何插件），空切片表示设置为空（不启用任何插件），具体列表表示启用指定插件
+// enabledPlugins: nil表示启用所有插件，空切片表示不启用任何插件，具体列表表示启用指定插件
 func (pm *PluginManager) RegisterGlobalPluginsWithFilter(enabledPlugins []string) {
 	allPlugins := GetRegisteredPlugins()
-	
-	// nil 表示未设置环境变量，不启用任何插件
+
+	// nil 表示未设置环境变量或设置为"all"，启用所有插件
 	if enabledPlugins == nil {
+		for _, plugin := range allPlugins {
+			pm.RegisterPlugin(plugin)
+		}
 		return
 	}
-	
-	// 空切片表示设置为空字符串，也不启用任何插件
+
+	// 空切片表示设置为空字符串，不启用任何插件
 	if len(enabledPlugins) == 0 {
 		return
 	}
-	
+
 	// 创建启用插件名称的映射表，用于快速查找
 	enabledMap := make(map[string]bool)
 	for _, name := range enabledPlugins {
 		enabledMap[name] = true
 	}
-	
+
 	// 只注册在启用列表中的插件
 	for _, plugin := range allPlugins {
 		if enabledMap[plugin.Name()] {
