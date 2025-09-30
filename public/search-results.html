@@ -512,11 +512,9 @@
             API_BASE: '/api',
             ITEMS_PER_PAGE: 20,
             MAX_RETRY: 3,
-            TIMEOUT: 45000,
+            TIMEOUT: 60000,  // 增加到60秒
             PROGRESSIVE_PHASES: [
-                { phase: 0, timeout: 3000, name: '快速搜索' },
-                { phase: 1, timeout: 6000, name: '扩展搜索' },
-                { phase: 2, timeout: 12000, name: '完整搜索' }
+                { phase: 0, timeout: 60000, name: '完整搜索' }  // 只用一个阶段，60秒超时
             ]
         };
         
