@@ -12,6 +12,50 @@ import (
 	"pansou/plugin"
 	jsonutil "pansou/util/json"
 	"pansou/util"
+
+	// 导入所有插件以触发init函数自动注册
+	_ "pansou/plugin/hunhepan"
+	_ "pansou/plugin/jikepan"
+	_ "pansou/plugin/panwiki"
+	_ "pansou/plugin/pansearch"
+	_ "pansou/plugin/panta"
+	_ "pansou/plugin/qupansou"
+	_ "pansou/plugin/susu"
+	_ "pansou/plugin/thepiratebay"
+	_ "pansou/plugin/wanou"
+	_ "pansou/plugin/xuexizhinan"
+	_ "pansou/plugin/panyq"
+	_ "pansou/plugin/zhizhen"
+	_ "pansou/plugin/labi"
+	_ "pansou/plugin/muou"
+	_ "pansou/plugin/ouge"
+	_ "pansou/plugin/shandian"
+	_ "pansou/plugin/duoduo"
+	_ "pansou/plugin/huban"
+	_ "pansou/plugin/cyg"
+	_ "pansou/plugin/erxiao"
+	_ "pansou/plugin/miaoso"
+	_ "pansou/plugin/fox4k"
+	_ "pansou/plugin/pianku"
+	_ "pansou/plugin/clmao"
+	_ "pansou/plugin/wuji"
+	_ "pansou/plugin/cldi"
+	_ "pansou/plugin/xiaozhang"
+	_ "pansou/plugin/libvio"
+	_ "pansou/plugin/leijing"
+	_ "pansou/plugin/xb6v"
+	_ "pansou/plugin/xys"
+	_ "pansou/plugin/ddys"
+	_ "pansou/plugin/hdmoli"
+	_ "pansou/plugin/yuhuage"
+	_ "pansou/plugin/u3c3"
+	_ "pansou/plugin/javdb"
+	_ "pansou/plugin/clxiong"
+	_ "pansou/plugin/jutoushe"
+	_ "pansou/plugin/sdso"
+	_ "pansou/plugin/xiaoji"
+	_ "pansou/plugin/xdyh"
+	_ "pansou/plugin/haisou"
 )
 
 var (
@@ -46,6 +90,11 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 		// 初始化插件管理器
 		pluginManager := plugin.NewPluginManager()
+
+		// 注册全局插件（根据配置过滤）
+		if config.AppConfig.AsyncPluginEnabled {
+			pluginManager.RegisterGlobalPluginsWithFilter(config.AppConfig.EnabledPlugins)
+		}
 
 		// 创建搜索服务
 		searchService = service.NewSearchService(pluginManager)
