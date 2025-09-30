@@ -88,6 +88,12 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		// 初始化配置
 		config.Init()
 
+		// 初始化HTTP客户端（插件需要）
+		util.InitHTTPClient()
+
+		// 初始化异步插件系统
+		plugin.InitAsyncPluginSystem()
+
 		// 初始化插件管理器
 		pluginManager := plugin.NewPluginManager()
 
