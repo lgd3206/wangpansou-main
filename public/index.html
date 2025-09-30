@@ -752,16 +752,6 @@
     </div>
 
     <div class="container">
-        <!-- 广告拦截检测提示 -->
-        <div class="adblock-notice" id="adblockNotice">
-            <div class="adblock-icon">🚫</div>
-            <div class="adblock-content">
-                <div class="adblock-title">检测到广告拦截器</div>
-                <div class="adblock-text">请关闭广告拦截器以支持我们提供免费的搜索服务</div>
-            </div>
-        </div>
-
-        <!-- 头部广告位 -->
         <!-- 头部 -->
         <div class="header">
             <h1 class="logo" style="display: flex; align-items: center; justify-content: center; gap: 12px;">
@@ -1003,11 +993,6 @@
 
         <!-- 底部广告位 -->
     </footer>
-
-    <!-- 性能优化、AdSense 优化和GDPR合规性脚本 -->
-    <script src="/js/performance-optimizer.js"></script>
-    <script src="/js/adsense-optimizer.js"></script>
-    <script src="/js/gdpr-compliance.js"></script>
 
     <script>
         // 简化的配置和变量（首页只需要跳转功能）
@@ -1509,12 +1494,6 @@
 
         // 页面初始化
         document.addEventListener('DOMContentLoaded', function() {
-            // 初始化性能优化系统
-            window.performanceOptimizer = new PerformanceOptimizer();
-
-            // 初始化广告系统
-            initAdsenseSystem();
-
             const platformTabs = document.querySelectorAll('.platform-tab');
 
             // 平台标签切换
@@ -1540,29 +1519,6 @@
                 this.value = this.value.replace(/[<>"']/g, '');
             });
         });
-
-        // 初始化AdSense系统
-        function initAdsenseSystem() {
-            console.log('初始化首页AdSense系统...');
-
-            // 检测广告拦截器
-            detectAdBlocker();
-
-            // 设置延迟加载
-                }
-
-                if (!stats[today][adSlot]) {
-                    stats[today][adSlot] = { impressions: 0, clicks: 0 };
-                }
-
-                stats[today][adSlot].impressions++;
-                localStorage.setItem('adStats', JSON.stringify(stats));
-
-                console.log(`记录首页广告展示: ${adSlot}`);
-            } catch (e) {
-                console.error('记录广告展示失败:', e);
-            }
-        }
 
         // 全局错误处理
         window.addEventListener('error', function(e) {

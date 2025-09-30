@@ -452,17 +452,6 @@
             </div>
         </div>
 
-        <!-- 广告拦截检测提示 -->
-        <div class="adblock-notice" id="adblockNotice">
-            <div class="adblock-icon">🚫</div>
-            <div class="adblock-content">
-                <div class="adblock-title">检测到广告拦截器</div>
-                <div class="adblock-text">请关闭广告拦截器以支持我们提供免费服务</div>
-            </div>
-        </div>
-
-        <!-- 广告位 - 顶部横幅 -->
-
         <div class="error-message" id="errorMessage"></div>
 
         <!-- 结果区域 -->
@@ -515,18 +504,7 @@
             <!-- 分页 -->
             <div class="pagination" id="pagination"></div>
         </div>
-
-        <!-- 广告位 - 底部横幅 -->
-
-        <!-- 内容广告位 - 在搜索结果中间插入 -->
-        <div class="in-content-ad" id="inContentAd" style="display: none;" data-ad-slot="inContent">
-        </div>
     </div>
-
-    <!-- 性能优化、AdSense 优化和GDPR合规性脚本 -->
-    <script src="/js/performance-optimizer.js"></script>
-    <script src="/js/adsense-optimizer.js"></script>
-    <script src="/js/gdpr-compliance.js"></script>
 
     <script>
         // 配置
@@ -554,12 +532,6 @@
 
         // 页面初始化
         document.addEventListener('DOMContentLoaded', function() {
-            // 初始化性能优化系统
-            window.performanceOptimizer = new PerformanceOptimizer();
-
-            // 初始化广告系统
-            initAdsenseSystem();
-
             // 从 URL 参数获取搜索关键词
             const urlParams = new URLSearchParams(window.location.search);
             const keyword = urlParams.get('kw');
@@ -576,59 +548,6 @@
             // 设置事件监听器
             setupEventListeners();
         });
-
-        // 初始化AdSense系统
-        function initAdsenseSystem() {
-            console.log('初始化AdSense系统...');
-
-            // 检测广告拦截器
-            detectAdBlocker();
-
-            // 设置延迟加载
-                }
-
-                if (!stats[today][adSlot]) {
-                    stats[today][adSlot] = { impressions: 0, clicks: 0 };
-                }
-
-                stats[today][adSlot].impressions++;
-                localStorage.setItem('adStats', JSON.stringify(stats));
-
-                console.log(`记录广告展示: ${adSlot}`);
-            } catch (e) {
-                console.error('记录广告展示失败:', e);
-            }
-        }
-
-        // 在搜索结果中智能插入内容广告
-        function insertInContentAd() {
-            const resultsGrid = document.getElementById('resultsGrid');
-            const resultItems = resultsGrid.querySelectorAll('.result-item');
-            const inContentAd = document.getElementById('inContentAd');
-
-            // 如果结果数量大于5，在第3个结果后插入广告
-            if (resultItems.length > 5 && inContentAd) {
-                const insertAfter = Math.floor(resultItems.length / 3);
-                const targetItem = resultItems[insertAfter];
-
-                if (targetItem && !inContentAd.parentNode) {
-                    targetItem.parentNode.insertBefore(inContentAd, targetItem.nextSibling);
-                    inContentAd.style.display = 'block';
-
-                    // 延迟加载这个广告
-                    setTimeout(() => {
-                        const adElement = inContentAd.querySelector('.adsbygoogle');
-                        if (adElement && !adElement.getAttribute('data-adsbygoogle-status')) {
-                            try {
-                                (window.adsbygoogle = window.adsbygoogle || []).push({});
-                            } catch (e) {
-                                console.error('内容广告加载失败:', e);
-                            }
-                        }
-                    }, 500);
-                }
-            }
-        }
 
         // 设置事件监听器
         function setupEventListeners() {
@@ -1038,11 +957,6 @@
 
             if (html) {
                 resultsGrid.innerHTML = html;
-
-                // 智能插入内容广告
-                setTimeout(() => {
-                    insertInContentAd();
-                }, 500);
 
                 // 添加继续搜索提示（如果还在搜索中）
                 if (isSearching) {
