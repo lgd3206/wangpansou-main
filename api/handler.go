@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"sync"
 	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"pansou/config"
@@ -13,6 +14,7 @@ import (
 	"pansou/plugin"
 	jsonutil "pansou/util/json"
 	"pansou/util"
+	"pansou/util/cache"
 
 	// 导入所有插件以触发init函数自动注册
 	_ "pansou/plugin/hunhepan"
@@ -91,6 +93,30 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 		// 初始化HTTP客户端（插件需要）
 		util.InitHTTPClient()
+
+		// 初始化缓存写入管理器
+		globalCacheWriteManager, err := cache.NewDelayedBatchWriteManager()
+		if err != nil {
+			fmt.Printf("⚠️ 缓存写入管理器创建失败: %v\n", err)
+		} else {
+			if err := globalCacheWriteManager.Initialize(); err != nil {
+				fmt.Printf("⚠️ 缓存写入管理器初始化失败: %v\n", err)
+			} else {
+				// 将缓存写入管理器注入到service包
+				service.SetGlobalCacheWriteManager(globalCacheWriteManager)
+
+				// 延迟设置主缓存更新函数，确保service初始化完成
+				go func() {
+					// 等待一小段时间确保service包完全初始化
+					time.Sleep(100 * time.Millisecond)
+					if mainCache := service.GetEnhancedTwoLevelCache(); mainCache != nil {
+						globalCacheWriteManager.SetMainCacheUpdater(func(key string, data []byte, ttl time.Duration) error {
+							return mainCache.SetBothLevels(key, data, ttl)
+						})
+					}
+				}()
+			}
+		}
 
 		// 初始化异步插件系统
 		plugin.InitAsyncPluginSystem()
