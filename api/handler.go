@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 	"sync"
 	"strings"
@@ -100,6 +101,9 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		// 注册全局插件（根据配置过滤）
 		if config.AppConfig.AsyncPluginEnabled {
 			pluginManager.RegisterGlobalPluginsWithFilter(config.AppConfig.EnabledPlugins)
+			fmt.Printf("✅ 已注册 %d 个搜索插件\n", len(pluginManager.GetPlugins()))
+		} else {
+			fmt.Println("⚠️ 异步插件已禁用")
 		}
 
 		// 创建搜索服务
@@ -314,10 +318,10 @@ if keyword == "" {
 		}
 	}
 	
-	// 可选：启用调试输出（生产环境建议注释掉）
-	// fmt.Printf("🔧 [调试] 搜索参数: keyword=%s, channels=%v, concurrency=%d, refresh=%v, resultType=%s, sourceType=%s, plugins=%v, cloudTypes=%v, ext=%v\n", 
-	//	req.Keyword, req.Channels, req.Concurrency, req.ForceRefresh, req.ResultType, req.SourceType, req.Plugins, req.CloudTypes, req.Ext)
-	
+	// 启用调试输出
+	fmt.Printf("🔧 [调试] 搜索参数: keyword=%s, channels=%v, concurrency=%d, refresh=%v, resultType=%s, sourceType=%s, plugins=%v, cloudTypes=%v\n",
+		req.Keyword, req.Channels, req.Concurrency, req.ForceRefresh, req.ResultType, req.SourceType, req.Plugins, req.CloudTypes)
+
 	// 执行搜索
 	result, err := searchService.Search(req.Keyword, req.Channels, req.Concurrency, req.ForceRefresh, req.ResultType, req.SourceType, req.Plugins, req.CloudTypes, req.Ext)
 	
