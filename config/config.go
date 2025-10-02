@@ -225,7 +225,7 @@ func getCacheMaxSize() int {
 func getCacheTTL() int {
 	ttlEnv := os.Getenv("CACHE_TTL")
 	if ttlEnv == "" {
-		return 60 // 默认60分钟
+		 return 240 // 默认240分钟（4小时）
 	}
 	ttl, err := strconv.Atoi(ttlEnv)
 	if err != nil || ttl <= 0 {
