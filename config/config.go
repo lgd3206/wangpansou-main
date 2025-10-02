@@ -136,8 +136,8 @@ func getDefaultConcurrency() int {
 		pluginCount = 7
 	}
 	
-	// 计算并发数 = 频道数 + 插件数 + 10
-	concurrency := channelCount + pluginCount + 10
+	// 计算并发数 = 频道数 + 插件数 + 30
+	concurrency := channelCount + pluginCount + 30
 	if concurrency < 1 {
 		concurrency = 1 // 确保至少为1
 	}
