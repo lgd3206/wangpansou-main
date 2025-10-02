@@ -282,7 +282,7 @@ func getOptimizeMemory() bool {
 func getPluginTimeout() int {
 	timeoutEnv := os.Getenv("PLUGIN_TIMEOUT")
 	if timeoutEnv == "" {
-		return 30 // 默认30秒
+		return 15 // 默认15秒
 	}
 	timeout, err := strconv.Atoi(timeoutEnv)
 	if err != nil || timeout <= 0 {
@@ -337,7 +337,7 @@ func getEnabledPlugins() []string {
 func getAsyncResponseTimeout() int {
 	timeoutEnv := os.Getenv("ASYNC_RESPONSE_TIMEOUT")
 	if timeoutEnv == "" {
-		return 4 // 默认4秒
+		return 2 // 默认2秒
 	}
 	timeout, err := strconv.Atoi(timeoutEnv)
 	if err != nil || timeout <= 0 {
